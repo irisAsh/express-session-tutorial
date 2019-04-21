@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require("express-session");
+var MongoStore = require('connect-mongo')(session);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -24,9 +25,10 @@ app.use(session({
   secret: "secret word",
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    maxAge: 60 * 1000
-  }
+  store: new MongoStore({
+    url: 'mongodb://127.0.0.1:27017/express-sesstion-tutorial',
+    ttl: 60
+  })
 }));
 
 app.use('/', indexRouter);
