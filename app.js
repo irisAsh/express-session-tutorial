@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require("express-session");
-var MongoStore = require('connect-mongo')(session);
+var RedisStore = require('connect-redis')(session);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -25,8 +25,10 @@ app.use(session({
   secret: "secret word",
   resave: false,
   saveUninitialized: false,
-  store: new MongoStore({
-    url: 'mongodb://127.0.0.1:27017/express-sesstion-tutorial',
+  store: new RedisStore({
+    host: '127.0.0.1',
+    port: 6379,
+    prefix: 'session-tutorial:',
     ttl: 60
   })
 }));
